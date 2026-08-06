@@ -61,18 +61,18 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
 
   // 1. Sales Rep Info & Goal (Saved to LocalStorage)
   const [salesName, setSalesName] = useState<string>(() => {
-    return localStorage.getItem('oxycalc_sales_name') || 'Sales Executive';
+    return localStorage.getItem('oxykal_sales_name') || localStorage.getItem('oxycalc_sales_name') || 'Sales Executive';
   });
 
   const [targetSa, setTargetSa] = useState<number>(() => {
-    const saved = localStorage.getItem('oxycalc_target_sa');
+    const saved = localStorage.getItem('oxykal_target_sa') || localStorage.getItem('oxycalc_target_sa');
     return saved ? parseInt(saved, 10) : 15;
   });
 
   // 2. Draft Selected Packages in Receipt (Struk Kasir)
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>(() => {
     try {
-      const saved = localStorage.getItem('oxycalc_selected_items');
+      const saved = localStorage.getItem('oxykal_selected_items') || localStorage.getItem('oxycalc_selected_items');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) return parsed;
@@ -86,7 +86,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
   // 3. Committed Items for Display Screen (Only updated when user clicks "HITUNG")
   const [committedItems, setCommittedItems] = useState<SelectedItem[]>(() => {
     try {
-      const saved = localStorage.getItem('oxycalc_committed_items');
+      const saved = localStorage.getItem('oxykal_committed_items') || localStorage.getItem('oxycalc_committed_items');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) return parsed;
@@ -109,7 +109,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
   // Save selectedItems & committedItems to LocalStorage
   useEffect(() => {
     try {
-      localStorage.setItem('oxycalc_selected_items', JSON.stringify(selectedItems));
+      localStorage.setItem('oxykal_selected_items', JSON.stringify(selectedItems));
     } catch (e) {
       console.error('Failed to save selected items to localStorage', e);
     }
@@ -117,7 +117,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
 
   useEffect(() => {
     try {
-      localStorage.setItem('oxycalc_committed_items', JSON.stringify(committedItems));
+      localStorage.setItem('oxykal_committed_items', JSON.stringify(committedItems));
     } catch (e) {
       console.error('Failed to save committed items to localStorage', e);
     }
@@ -151,13 +151,13 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
   // Handlers for Sales Info
   const handleNameChange = (val: string) => {
     setSalesName(val);
-    localStorage.setItem('oxycalc_sales_name', val);
+    localStorage.setItem('oxykal_sales_name', val);
   };
 
   const handleTargetChange = (val: number) => {
     const num = Math.max(1, val);
     setTargetSa(num);
-    localStorage.setItem('oxycalc_target_sa', num.toString());
+    localStorage.setItem('oxykal_target_sa', num.toString());
   };
 
   // Item Operations on Receipt Draft
@@ -233,6 +233,8 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
     setSelectedItems([]);
     setCommittedItems([]);
     setHasCalculatedOnce(false);
+    localStorage.removeItem('oxykal_selected_items');
+    localStorage.removeItem('oxykal_committed_items');
     localStorage.removeItem('oxycalc_selected_items');
     localStorage.removeItem('oxycalc_committed_items');
   };
@@ -429,7 +431,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
   // Generate WhatsApp Share Text
   const shareText = useMemo(() => {
     const lines = [
-      `📟 *STRUK SIMULASI MESIN KASIR REVENUE OXYCALC*`,
+      `📟 *STRUK SIMULASI MESIN KASIR REVENUE OXYKAL*`,
       `👤 *Sales Executive:* ${salesName || 'Sales'}`,
       `🎯 *Target SA:* ${targetSa} SA (${Math.round(
         (calculations.totalClosing / targetSa) * 100
@@ -456,7 +458,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
     }
 
     lines.push(`----------------------------------------`);
-    lines.push(`Dibuat via *OxyCalc Sales Revenue Simulator*`);
+    lines.push(`Dibuat via *OxyKal Sales Revenue Simulator*`);
 
     return lines.join('\n');
   }, [salesName, targetSa, calculations]);
@@ -494,11 +496,14 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
             <div className="w-full flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3 shrink-0">
               {/* Brand Logo & Clean Name */}
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 bg-orange-500 rounded-lg flex items-center justify-center text-slate-950 font-black shadow-md shrink-0">
-                  <Calculator className="w-4 h-4" />
-                </div>
+                <img
+                  src="https://i.imgur.com/YWbzvKD.jpg"
+                  alt="OxyKal Logo"
+                  referrerPolicy="no-referrer"
+                  className="w-7 h-7 rounded-lg object-cover border border-slate-300 dark:border-slate-700 shadow-xs shrink-0"
+                />
                 <span className="text-base font-black tracking-wider text-slate-900 dark:text-white uppercase leading-none font-mono">
-                  Oxy<span className="text-orange-600 dark:text-orange-400">Calc</span>
+                  Oxy<span className="text-orange-600 dark:text-orange-400">Kal</span>
                 </span>
               </div>
 
@@ -519,7 +524,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
               {/* Title & Tagline */}
               <div className="space-y-4 max-w-2xl w-full flex flex-col items-center justify-center">
                 <div className="inline-flex items-center gap-2 text-orange-700 dark:text-orange-400/90 font-mono text-xs sm:text-sm font-bold tracking-widest uppercase bg-white dark:bg-slate-950 px-3.5 py-1.5 rounded-full border border-slate-300 dark:border-slate-800 shadow-xs">
-                  <span>OxyCalc Sales Revenue Simulator 2026</span>
+                  <span>OxyKal Revenue Simulator</span>
                 </div>
                 <h1 className="text-4xl sm:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-tight flex items-center justify-center flex-wrap gap-2 sm:gap-3 text-center">
                   <span>Kalkulator</span>
@@ -532,7 +537,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                   />
                 </h1>
                 <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-xl mx-auto text-center">
-                  Simulasikan paket internet Oxygen.id, kualifikasi Tier dan estimasi total komisi sales secara cepat & akurat.
+                  Simulasi perhitungan revenue dan estimasi komisi berdasarkan tier secara cepat & akurat 90%.
                 </p>
               </div>
 
@@ -542,20 +547,20 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                   <Zap className="w-6 h-6 text-amber-500 dark:text-amber-400 shrink-0" />
                   <div>
                     <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">Hitung Cepat</div>
-                    <div className="text-[11px] text-slate-500 dark:text-slate-400">Simulasi 4 Opsi Billing</div>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400">Simulasi Perhitungan SA</div>
                   </div>
                 </div>
                 <div className="p-3.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center gap-3 shadow-sm hover:border-orange-500/40 transition-colors">
                   <BarChart2 className="w-6 h-6 text-orange-600 dark:text-orange-400 shrink-0" />
                   <div>
-                    <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">Tier Stat</div>
+                    <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">Tier Stats</div>
                     <div className="text-[11px] text-slate-500 dark:text-slate-400">Otomatis Progres Target</div>
                   </div>
                 </div>
                 <div className="p-3.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center gap-3 shadow-sm hover:border-orange-500/40 transition-colors">
                   <Share2 className="w-6 h-6 text-blue-600 dark:text-blue-400 shrink-0" />
                   <div>
-                    <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">Export WhatsApp</div>
+                    <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">Cetak Revenue</div>
                     <div className="text-[11px] text-slate-500 dark:text-slate-400">Bagikan Struk Instan</div>
                   </div>
                 </div>
@@ -581,11 +586,14 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
               <div className="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800/80 pb-2">
                 {/* Brand Logo & Clean Name */}
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-orange-500 rounded-md flex items-center justify-center text-slate-950 font-black shadow-md shrink-0">
-                    <Calculator className="w-3.5 h-3.5" />
-                  </div>
+                  <img
+                    src="https://i.imgur.com/YWbzvKD.jpg"
+                    alt="OxyKal Logo"
+                    referrerPolicy="no-referrer"
+                    className="w-6 h-6 rounded-md object-cover border border-slate-300 dark:border-slate-700 shadow-xs shrink-0"
+                  />
                   <span className="text-sm font-black tracking-wider text-slate-900 dark:text-white uppercase leading-none font-mono">
-                    Oxy<span className="text-orange-600 dark:text-orange-400">Calc</span>
+                    Oxy<span className="text-orange-600 dark:text-orange-400">Kal</span>
                   </span>
                 </div>
 
@@ -1116,7 +1124,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
 
       {/* BOTTOM FOOTER COPYRIGHT */}
       <footer className="shrink-0 py-1 text-center font-mono font-bold text-[11px] text-slate-500 dark:text-slate-400 tracking-wider uppercase">
-        OxyCalc by E61 - 2026
+        OxyKal by E61 - 2026
       </footer>
 
       {/* PRINT & EXPORT MODAL */}
@@ -1140,7 +1148,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
             <div className="space-y-1">
               <label className="block text-[10px] font-black uppercase text-slate-500 dark:text-slate-400 flex items-center gap-1">
                 <User className="w-3 h-3 text-orange-500" />
-                Nama Sales Executive:
+                Nama Sales:
               </label>
               <input
                 type="text"
@@ -1164,7 +1172,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                 className="px-3 py-1.5 bg-orange-500 hover:bg-orange-400 text-slate-950 font-black text-xs uppercase rounded-lg transition-all flex items-center gap-1.5 shadow-md cursor-pointer"
               >
                 <Printer className="w-3.5 h-3.5 text-slate-950" />
-                <span>Cetak Dokumen</span>
+                <span>Cetak Revenue</span>
               </button>
 
               <button

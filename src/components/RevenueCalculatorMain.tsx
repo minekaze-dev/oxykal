@@ -532,7 +532,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                   <img 
                     src="https://i.imgur.com/niUBncI.jpg" 
                     alt="Oxygen.id Logo" 
-                    className="h-[1em] sm:h-[1.15em] w-auto object-contain inline-block align-middle mix-blend-multiply dark:mix-blend-screen dark:invert"
+                    className="h-[1em] sm:h-[1.15em] w-auto object-contain inline-block align-middle mix-blend-multiply dark:mix-blend-screen"
                     referrerPolicy="no-referrer"
                   />
                 </h1>

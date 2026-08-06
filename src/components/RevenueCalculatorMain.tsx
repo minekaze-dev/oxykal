@@ -494,8 +494,19 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
           /* LANDING PAGE VIEW INSIDE FULL TABLET DISPLAY SCREEN */
           <div className="flex-1 min-h-0 w-full flex flex-col justify-between p-3 sm:p-6 md:p-8 text-center animate-in fade-in zoom-in-95 duration-300 relative overflow-y-auto bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-white rounded-xl sm:rounded-2xl transition-colors duration-200 border border-slate-200/80 dark:border-slate-800/80">
             
+            {/* SUBTLE BACKGROUND WALLPAPER WITH FADED SHADOW EFFECT */}
+            <div className="absolute inset-0 pointer-events-none select-none overflow-hidden rounded-xl sm:rounded-2xl z-0" aria-hidden="true">
+              <img
+                src="https://imgur.com/7lzkq1g.jpg"
+                alt=""
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover object-center opacity-35 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen scale-100 brightness-110 contrast-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-slate-100/40 via-slate-100/10 to-slate-100/50 dark:from-slate-950/50 dark:via-slate-950/20 dark:to-slate-950/60"></div>
+            </div>
+
             {/* TOP BAR WITH BRAND LOGO + THEME TOGGLE & SHARE */}
-            <div className="w-full flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3 shrink-0">
+            <div className="relative z-10 w-full flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3 shrink-0">
               {/* Brand Logo & Clean Name */}
               <div className="flex items-center gap-2">
                 <img
@@ -513,7 +524,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
               <div className="flex items-center gap-2">
                 <button
                   onClick={onToggleDarkMode}
-                  className="p-1.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition-colors cursor-pointer border border-slate-300 dark:border-slate-700"
+                  className="p-1.5 bg-slate-200/80 dark:bg-slate-800/80 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition-colors cursor-pointer border border-slate-300 dark:border-slate-700"
                   title="Toggle Dark/Light Mode"
                 >
                   {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
@@ -522,7 +533,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
             </div>
 
             {/* MAIN CENTERED HERO CONTENT */}
-            <div className="flex-1 flex flex-col items-center justify-center space-y-6 sm:space-y-8 py-6 my-auto max-w-3xl mx-auto w-full text-center">
+            <div className="relative z-10 flex-1 flex flex-col items-center justify-center space-y-6 sm:space-y-8 py-6 my-auto max-w-3xl mx-auto w-full text-center">
               {/* Title & Tagline */}
               <div className="space-y-4 max-w-2xl w-full flex flex-col items-center justify-center">
                 <div className="inline-flex items-center gap-2 text-orange-700 dark:text-orange-400/90 font-mono text-xs sm:text-sm font-bold tracking-widest uppercase bg-white dark:bg-slate-950 px-3.5 py-1.5 rounded-full border border-slate-300 dark:border-slate-800 shadow-xs">

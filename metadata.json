@@ -1,0 +1,8 @@
+{
+  "name": "OxyCalc",
+  "description": "Kalkulator Simulasi Revenue, Kualifikasi Tier, dan Komisi Sales ISP secara instan dan realtime.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

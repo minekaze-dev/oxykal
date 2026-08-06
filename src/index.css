@@ -1,0 +1,335 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+html {
+  font-size: 14px; /* Slightly zoomed out compact scale for dashboard density */
+  background-color: #f8fafc;
+}
+
+body, #root {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #f8fafc;
+}
+
+html.dark, html.dark body, html.dark #root {
+  background-color: #020617 !important;
+}
+
+/* Ensure full screen containers and root app containers don't get rounded corners in modern mode */
+html.ui-modern body,
+html.ui-modern #root,
+html.ui-modern #root > div,
+html.ui-modern .h-screen,
+html.ui-modern .min-h-screen {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Custom Scrollbar styling matching light and dark themes */
+::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #090d16;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Firefox scrollbar support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.dark * {
+  scrollbar-color: #1e293b #090d16;
+}
+
+/* UI Style: Modern Mode Overrides (Fresh Rounded, Borderless Solid Fills & Ambient Shadows) */
+
+/* 1. Eliminate all outer borders from cards, lists, panels, containers & form boxes */
+html.ui-modern .border-2,
+html.ui-modern .border-3,
+html.ui-modern .border-4,
+html.ui-modern .border {
+  border-width: 0 !important;
+  border-color: transparent !important;
+}
+
+html.ui-modern div.border-2,
+html.ui-modern div.border,
+html.ui-modern label.border-2,
+html.ui-modern label.border,
+html.ui-modern section.border-2,
+html.ui-modern section.border,
+html.ui-modern form.border-2,
+html.ui-modern form.border {
+  border: none !important;
+  border-width: 0 !important;
+}
+
+/* Allow clean internal horizontal section dividers if needed */
+html.ui-modern .border-b-2,
+html.ui-modern .border-b {
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6) !important;
+}
+
+.dark html.ui-modern .border-b-2,
+.dark html.ui-modern .border-b {
+  border-bottom: 1px solid rgba(30, 41, 59, 0.6) !important;
+}
+
+html.ui-modern .border-t-2,
+html.ui-modern .border-t {
+  border-top: 1px solid rgba(226, 232, 240, 0.6) !important;
+}
+
+.dark html.ui-modern .border-t-2,
+.dark html.ui-modern .border-t {
+  border-top: 1px solid rgba(30, 41, 59, 0.6) !important;
+}
+
+/* 2. Global rounding & Ambient Shadow transformation for Modern Mode Cards & Containers */
+html.ui-modern .rounded-none {
+  border-radius: 1.125rem !important; /* ~18px smooth modern rounding */
+}
+
+html.ui-modern .p-1.5.rounded-none,
+html.ui-modern .p-2.rounded-none,
+html.ui-modern .p-2.5.rounded-none,
+html.ui-modern .p-3.rounded-none,
+html.ui-modern .px-1.5.py-0.5.rounded-none,
+html.ui-modern .px-2.py-0.5.rounded-none {
+  border-radius: 0.625rem !important; /* ~10px for small badges/icons */
+}
+
+/* Elevated ambient shadows & borderless solid cards */
+html.ui-modern div.bg-white,
+html.ui-modern div.bg-slate-50,
+html.ui-modern div.bg-slate-900,
+html.ui-modern div.bg-\[\#0F172A\],
+html.ui-modern label.bg-white,
+html.ui-modern section,
+html.ui-modern article,
+html.ui-modern aside {
+  border-radius: 1.125rem !important;
+  border: none !important;
+  border-width: 0 !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06), 0 4px 12px -2px rgba(0, 0, 0, 0.03) !important;
+}
+
+.dark html.ui-modern div.bg-white,
+.dark html.ui-modern div.bg-slate-50,
+.dark html.ui-modern div.bg-slate-900,
+.dark html.ui-modern div.bg-\[\#0F172A\],
+.dark html.ui-modern label.bg-white,
+.dark html.ui-modern section,
+.dark html.ui-modern article,
+.dark html.ui-modern aside {
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.4), 0 4px 12px -2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Header Navbar in Modern mode */
+html.ui-modern header {
+  border: none !important;
+  border-width: 0 !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark html.ui-modern header {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 3. Borderless Solid Modal Popups */
+html.ui-modern .fixed .bg-white,
+html.ui-modern .fixed .bg-slate-900,
+html.ui-modern .fixed .bg-\[\#0F172A\],
+html.ui-modern [role="dialog"] {
+  border: none !important;
+  border-width: 0 !important;
+  border-radius: 1.5rem !important; /* 24px rounded modals */
+  box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Khusus Modal Login di Tema Gelap: Memiliki list/border biru terang */
+.dark #auth-modal,
+.dark html.ui-modern #auth-modal {
+  border: 2px solid #3b82f6 !important;
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.35), 0 25px 60px -10px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 4. Completely Borderless Solid Buttons in Modern Mode */
+html.ui-modern button {
+  border: none !important;
+  border-width: 0 !important;
+  border-color: transparent !important;
+  border-radius: 0.85rem !important; /* ~14px smooth rounded corners */
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Outline / Ghost / White buttons get solid background fill instead of outline strokes */
+html.ui-modern button.bg-white {
+  background-color: #f1f5f9 !important; /* Solid light slate-100 fill */
+  color: #0f172a !important;
+}
+
+.dark html.ui-modern button.bg-white,
+.dark html.ui-modern button.bg-slate-900,
+.dark html.ui-modern button.bg-slate-950 {
+  background-color: #1e293b !important; /* Solid dark slate-800 fill */
+  color: #f8fafc !important;
+}
+
+/* Primary Accent Buttons (Blue, Green, Emerald, Lime, Slate) */
+html.ui-modern button.bg-blue-600 {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px -2px rgba(37, 99, 235, 0.35) !important;
+}
+
+html.ui-modern button.bg-emerald-600 {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px -2px rgba(5, 150, 105, 0.35) !important;
+}
+
+html.ui-modern button.bg-indigo-600 {
+  background-color: #4f46e5 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px -2px rgba(79, 70, 229, 0.35) !important;
+}
+
+html.ui-modern button.bg-\[\#a3e635\] {
+  background-color: #a3e635 !important;
+  color: #020617 !important;
+  box-shadow: 0 4px 14px -2px rgba(163, 230, 53, 0.35) !important;
+}
+
+html.ui-modern button:hover {
+  transform: translateY(-1.5px);
+  filter: brightness(1.06);
+}
+
+/* 5. Modern Inputs, Selects & Textareas: Completely Borderless with Solid Background Fill */
+html.ui-modern input,
+html.ui-modern select,
+html.ui-modern textarea {
+  border-radius: 0.85rem !important;
+  border: none !important;
+  border-width: 0 !important;
+  border-color: transparent !important;
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.2s ease !important;
+}
+
+.dark html.ui-modern input,
+.dark html.ui-modern select,
+.dark html.ui-modern textarea {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15) !important;
+}
+
+html.ui-modern input:focus,
+html.ui-modern select:focus,
+html.ui-modern textarea:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25) !important;
+}
+
+/* 6. Modern Badges & Pills */
+html.ui-modern span.px-2,
+html.ui-modern span.px-2.5,
+html.ui-modern span.px-3,
+html.ui-modern span.px-1.5 {
+  border-radius: 9999px !important; /* Full pill badges */
+  border: none !important; /* Remove harsh badge borders */
+  border-width: 0 !important;
+}
+
+/* 7. Modern Table Styling */
+html.ui-modern table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: 1.125rem !important;
+  border: none !important;
+  overflow: hidden !important;
+}
+
+html.ui-modern th,
+html.ui-modern td {
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5) !important;
+}
+
+.dark html.ui-modern th,
+.dark html.ui-modern td {
+  border-bottom: 1px solid rgba(30, 41, 59, 0.5) !important;
+}
+
+html.ui-modern tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* Digital POS Cash Register Font Class */
+.font-pos {
+  font-family: 'VT323', 'Share Tech Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+.text-pos-green {
+  color: #ff6600;
+  text-shadow: 0 0 10px rgba(255, 102, 0, 0.5), 0 0 20px rgba(255, 102, 0, 0.25);
+}
+
+.text-pos-amber {
+  color: #ffcc00;
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+}
+
+.text-pos-rose {
+  color: #ff4d4d;
+  text-shadow: 0 0 10px rgba(255, 77, 77, 0.4);
+}
+
+.bg-pos-screen {
+  background-color: #f8fafc;
+  background-image: radial-gradient(rgba(249, 115, 22, 0.12) 1px, transparent 0);
+  background-size: 16px 16px;
+}
+
+.dark .bg-pos-screen {
+  background-color: #050811;
+  background-image: radial-gradient(rgba(255, 102, 0, 0.05) 1px, transparent 0);
+  background-size: 16px 16px;
+}
+
+

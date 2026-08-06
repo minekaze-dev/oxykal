@@ -475,18 +475,20 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
   };
 
   return (
-    <div className="h-screen max-h-screen overflow-hidden flex flex-col items-center justify-between bg-slate-200 dark:bg-[#020617] text-slate-900 dark:text-slate-100 font-sans p-2 sm:p-3">
-      {/* ALL-IN-ONE CALCULATOR CHASSIS FRAME WITH REALISTIC TABLET BEZEL */}
-      <main className="flex-1 min-h-0 max-w-7xl w-full rounded-[2.2rem] sm:rounded-[3rem] p-2.5 sm:p-4 shadow-2xl flex flex-col gap-2 relative transition-all duration-300 bg-slate-200 dark:bg-slate-950 border-[12px] sm:border-[20px] border-slate-300 dark:border-slate-800/95 shadow-[0_25px_60px_rgba(0,0,0,0.15)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.5)] ring-1 ring-slate-400/70 dark:ring-slate-700/70">
-        
+    <div className="min-h-screen lg:h-screen lg:max-h-screen overflow-y-auto lg:overflow-hidden flex flex-col items-center justify-between bg-slate-200 dark:bg-[#020617] text-slate-900 dark:text-slate-100 font-sans p-1.5 sm:p-3 lg:py-6 lg:px-6">
+      {/* ALL-IN-ONE CALCULATOR CHASSIS WRAPPER */}
+      <div className="relative w-full max-w-7xl flex-1 min-h-0 flex flex-col">
         {/* SAMSUL HARDWARE BRAND LOGO EMBEDDED ON TOP TABLET BEZEL */}
-        <div className="absolute -top-[10px] sm:-top-[16px] left-1/2 -translate-x-1/2 z-30 pointer-events-none flex items-center gap-2 select-none px-3 py-0.5 rounded-full bg-slate-300/80 dark:bg-slate-800/90 border border-slate-400/50 dark:border-slate-700/80 shadow-xs">
-          <div className="w-1.5 h-1.5 rounded-full bg-slate-500 dark:bg-slate-400 animate-pulse"></div>
-          <span className="font-black tracking-[0.3em] text-[10px] sm:text-[11px] text-slate-800 dark:text-slate-100 font-mono uppercase drop-shadow-xs">
+        <div className="absolute top-[2px] sm:top-[3px] left-1/2 -translate-x-1/2 z-30 pointer-events-none flex items-center gap-2 select-none px-3 sm:px-3.5 py-0.5 rounded-full bg-slate-300/90 dark:bg-slate-900/90 border border-slate-400 dark:border-slate-600 shadow-sm ring-1 ring-black/10 dark:ring-white/20">
+          <div className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-cyan-400 animate-pulse"></div>
+          <span className="font-black tracking-[0.3em] text-[10px] sm:text-[11px] text-slate-900 dark:text-white font-mono uppercase drop-shadow-sm">
             SAMSUL
           </span>
-          <div className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-500"></div>
+          <div className="w-1.5 h-1.5 rounded-full bg-slate-500 dark:bg-slate-400"></div>
         </div>
+
+        {/* REALISTIC TABLET BEZEL MAIN CONTAINER */}
+        <main className="flex-1 min-h-0 w-full rounded-[2.2rem] sm:rounded-[3rem] p-2 sm:p-4 lg:p-5 shadow-2xl flex flex-col gap-2 lg:gap-3 relative transition-all duration-300 bg-slate-200 dark:bg-slate-950 border-[8px] sm:border-[20px] border-slate-300 dark:border-slate-800/95 shadow-[0_25px_60px_rgba(0,0,0,0.15)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.5)] ring-1 ring-slate-400/70 dark:ring-slate-700/70 overflow-y-auto lg:overflow-hidden">
 
         {viewMode === 'landing' ? (
           /* LANDING PAGE VIEW INSIDE FULL TABLET DISPLAY SCREEN */
@@ -784,9 +786,9 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
             </div>
 
             {/* LOWER CALCULATOR SPLIT VIEW */}
-            <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-2.5 items-stretch overflow-hidden">
+            <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-2.5 items-stretch overflow-visible lg:overflow-hidden">
               {/* LEFT: PAKET PENJUALAN GRID (LG:COL-SPAN-7) */}
-              <div className="lg:col-span-7 bg-white dark:bg-[#0f172a] rounded-xl p-2.5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col h-full overflow-hidden space-y-1.5">
+              <div className="lg:col-span-7 bg-white dark:bg-[#0f172a] rounded-xl p-2.5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col h-[480px] sm:h-[520px] lg:h-full overflow-hidden space-y-1.5 shrink-0 lg:shrink">
                 <div className="shrink-0 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
                   <div className="flex items-center gap-1.5">
                     <Package className="w-4 h-4 text-blue-600" />
@@ -948,7 +950,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
               </div>
 
               {/* RIGHT: STRUK PENJUALAN / RECEIPT LIST (LG:COL-SPAN-5) */}
-              <div className="lg:col-span-5 bg-white dark:bg-[#0f172a] rounded-xl p-2.5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col h-full overflow-hidden space-y-1.5">
+              <div className="lg:col-span-5 bg-white dark:bg-[#0f172a] rounded-xl p-2.5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col h-[320px] sm:h-[360px] lg:h-full overflow-hidden space-y-1.5 shrink-0 lg:shrink">
                 <div className="shrink-0 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
                   <div className="flex items-center gap-1.5">
                     <Receipt className="w-4 h-4 text-orange-600" />
@@ -1121,9 +1123,10 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
           </>
         )}
       </main>
+      </div>
 
       {/* BOTTOM FOOTER COPYRIGHT */}
-      <footer className="shrink-0 py-1 text-center font-mono font-bold text-[11px] text-slate-500 dark:text-slate-400 tracking-wider uppercase">
+      <footer className="shrink-0 py-1 lg:pt-2 lg:pb-1.5 text-center font-mono font-bold text-[11px] text-slate-500 dark:text-slate-400 tracking-wider uppercase">
         OxyKal by E61 - 2026
       </footer>
 

@@ -305,6 +305,15 @@ html.ui-modern tr:last-child td {
   letter-spacing: 0.05em;
 }
 
+/* Handwriting & Casual Fonts for Landing Hero */
+.font-handwriting {
+  font-family: 'Caveat', 'Patrick Hand', cursive, sans-serif;
+}
+
+.font-casual {
+  font-family: 'Fredoka', 'Patrick Hand', sans-serif;
+}
+
 .text-pos-green {
   color: #ff6600;
   text-shadow: 0 0 10px rgba(255, 102, 0, 0.5), 0 0 20px rgba(255, 102, 0, 0.25);

@@ -528,13 +528,13 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                 <div className="inline-flex items-center gap-2 text-orange-700 dark:text-orange-400/90 font-mono text-xs sm:text-sm font-bold tracking-widest uppercase bg-white dark:bg-slate-950 px-3.5 py-1.5 rounded-full border border-slate-300 dark:border-slate-800 shadow-xs">
                   <span>OxyKal Revenue Simulator</span>
                 </div>
-                <h1 className="text-4xl sm:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-tight flex items-center justify-center flex-wrap gap-2 sm:gap-3 text-center">
+                <h1 className="text-5xl sm:text-7xl font-bold font-handwriting text-slate-900 dark:text-white leading-tight flex items-center justify-center flex-wrap gap-2 sm:gap-3 text-center">
                   <span>Kalkulator</span>
                   <span className="text-orange-600 dark:text-orange-400">Revenue</span>
                   <img 
                     src="https://i.imgur.com/niUBncI.jpg" 
                     alt="Oxygen.id Logo" 
-                    className="h-[1em] sm:h-[1.15em] w-auto object-contain inline-block align-middle mix-blend-multiply dark:mix-blend-screen"
+                    className="h-[0.85em] sm:h-[0.95em] w-auto object-contain inline-block align-middle mix-blend-multiply dark:mix-blend-screen"
                     referrerPolicy="no-referrer"
                   />
                 </h1>

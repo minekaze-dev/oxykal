@@ -475,27 +475,27 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
   };
 
   return (
-    <div className="min-h-screen lg:h-screen lg:max-h-screen overflow-y-auto lg:overflow-hidden flex flex-col items-center justify-between bg-slate-200 dark:bg-[#020617] text-slate-900 dark:text-slate-100 font-sans p-1.5 sm:p-3 lg:py-6 lg:px-6">
+    <div className="min-h-screen lg:h-screen lg:max-h-screen overflow-y-auto lg:overflow-hidden flex flex-col items-center justify-between bg-slate-100 dark:bg-[#020617] sm:bg-slate-200 sm:dark:bg-[#020617] text-slate-900 dark:text-slate-100 font-sans p-0 sm:p-3 lg:py-6 lg:px-6">
       {/* ALL-IN-ONE CALCULATOR CHASSIS WRAPPER */}
       <div className="relative w-full max-w-7xl flex-1 min-h-0 flex flex-col">
-        {/* SAMSUL HARDWARE BRAND LOGO EMBEDDED ON TOP TABLET BEZEL */}
-        <div className="absolute top-[2px] sm:top-[3px] left-1/2 -translate-x-1/2 z-30 pointer-events-none flex items-center gap-2 select-none px-3 sm:px-3.5 py-0.5 rounded-full bg-slate-300/90 dark:bg-slate-900/90 border border-slate-400 dark:border-slate-600 shadow-sm ring-1 ring-black/10 dark:ring-white/20">
+        {/* SAMSUL HARDWARE BRAND LOGO EMBEDDED ON TOP TABLET BEZEL (DESKTOP/TABLET ONLY) */}
+        <div className="hidden sm:flex absolute top-[3px] left-1/2 -translate-x-1/2 z-30 pointer-events-none items-center gap-2 select-none px-3.5 py-0.5 rounded-full bg-slate-300/90 dark:bg-slate-900/90 border border-slate-400 dark:border-slate-600 shadow-sm ring-1 ring-black/10 dark:ring-white/20">
           <div className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-cyan-400 animate-pulse"></div>
-          <span className="font-black tracking-[0.3em] text-[10px] sm:text-[11px] text-slate-900 dark:text-white font-mono uppercase drop-shadow-sm">
+          <span className="font-black tracking-[0.3em] text-[11px] text-slate-900 dark:text-white font-mono uppercase drop-shadow-sm">
             SAMSUL
           </span>
           <div className="w-1.5 h-1.5 rounded-full bg-slate-500 dark:bg-slate-400"></div>
         </div>
 
-        {/* REALISTIC TABLET BEZEL MAIN CONTAINER */}
-        <main className="flex-1 min-h-0 w-full rounded-[2.2rem] sm:rounded-[3rem] p-2 sm:p-4 lg:p-5 shadow-2xl flex flex-col gap-2 lg:gap-3 relative transition-all duration-300 bg-slate-200 dark:bg-slate-950 border-[8px] sm:border-[20px] border-slate-300 dark:border-slate-800/95 shadow-[0_25px_60px_rgba(0,0,0,0.15)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.5)] ring-1 ring-slate-400/70 dark:ring-slate-700/70 overflow-y-auto lg:overflow-hidden">
+        {/* MAIN CONTAINER: NORMAL WEB ON MOBILE, TABLET BEZEL ON SM/LG */}
+        <main className={`flex-1 min-h-0 w-full rounded-none sm:rounded-[3rem] p-0 sm:p-4 lg:p-5 flex flex-col gap-2 lg:gap-3 relative transition-all duration-300 bg-slate-100 dark:bg-slate-950 sm:bg-slate-200 sm:dark:bg-slate-950 border-0 sm:border-[20px] border-slate-300 dark:border-slate-800/95 sm:shadow-[0_25px_60px_rgba(0,0,0,0.15)] sm:dark:shadow-[0_25px_60px_rgba(0,0,0,0.5)] ring-0 sm:ring-1 sm:ring-slate-400/70 sm:dark:ring-slate-700/70 ${viewMode === 'landing' ? 'overflow-hidden' : 'overflow-y-auto lg:overflow-hidden'}`}>
 
         {viewMode === 'landing' ? (
           /* LANDING PAGE VIEW INSIDE FULL TABLET DISPLAY SCREEN */
-          <div className="flex-1 min-h-0 w-full flex flex-col justify-between p-3 sm:p-6 md:p-8 text-center animate-in fade-in zoom-in-95 duration-300 relative overflow-y-auto bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-white rounded-xl sm:rounded-2xl transition-colors duration-200 border border-slate-200/80 dark:border-slate-800/80">
+          <div className="flex-1 min-h-0 w-full flex flex-col justify-between p-2.5 sm:p-6 md:p-8 text-center animate-in fade-in zoom-in-95 duration-300 relative overflow-hidden bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-white rounded-none sm:rounded-2xl transition-colors duration-200 border-0 sm:border sm:border-slate-200/80 sm:dark:border-slate-800/80">
             
             {/* SUBTLE BACKGROUND WALLPAPER WITH FADED SHADOW EFFECT */}
-            <div className="absolute inset-0 pointer-events-none select-none overflow-hidden rounded-xl sm:rounded-2xl z-0" aria-hidden="true">
+            <div className="absolute inset-0 pointer-events-none select-none overflow-hidden rounded-none sm:rounded-2xl z-0" aria-hidden="true">
               <img
                 src="https://imgur.com/7lzkq1g.jpg"
                 alt=""
@@ -506,16 +506,16 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
             </div>
 
             {/* TOP BAR WITH BRAND LOGO + THEME TOGGLE & SHARE */}
-            <div className="relative z-10 w-full flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3 shrink-0">
+            <div className="relative z-10 w-full flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-2 sm:pb-3 shrink-0">
               {/* Brand Logo & Clean Name */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <img
                   src="https://i.imgur.com/YWbzvKD.jpg"
                   alt="OxyKal Logo"
                   referrerPolicy="no-referrer"
-                  className="w-7 h-7 rounded-lg object-cover border border-slate-300 dark:border-slate-700 shadow-xs shrink-0"
+                  className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg object-cover border border-slate-300 dark:border-slate-700 shadow-xs shrink-0"
                 />
-                <span className="text-base font-black tracking-wider text-slate-900 dark:text-white uppercase leading-none font-mono">
+                <span className="text-sm sm:text-base font-black tracking-wider text-slate-900 dark:text-white uppercase leading-none font-mono">
                   Oxy<span className="text-orange-600 dark:text-orange-400">Kal</span>
                 </span>
               </div>
@@ -527,54 +527,54 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                   className="p-1.5 bg-slate-200/80 dark:bg-slate-800/80 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg transition-colors cursor-pointer border border-slate-300 dark:border-slate-700"
                   title="Toggle Dark/Light Mode"
                 >
-                  {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
+                  {darkMode ? <Sun className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" /> : <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
                 </button>
               </div>
             </div>
 
             {/* MAIN CENTERED HERO CONTENT */}
-            <div className="relative z-10 flex-1 flex flex-col items-center justify-center space-y-6 sm:space-y-8 py-6 my-auto max-w-3xl mx-auto w-full text-center">
+            <div className="relative z-10 flex-1 flex flex-col items-center justify-center space-y-3 sm:space-y-6 md:space-y-8 py-2 sm:py-6 my-auto max-w-3xl mx-auto w-full text-center">
               {/* Title & Tagline */}
-              <div className="space-y-4 max-w-2xl w-full flex flex-col items-center justify-center">
-                <div className="inline-flex items-center gap-2 text-orange-700 dark:text-orange-400/90 font-mono text-xs sm:text-sm font-bold tracking-widest uppercase bg-white dark:bg-slate-950 px-3.5 py-1.5 rounded-full border border-slate-300 dark:border-slate-800 shadow-xs">
+              <div className="space-y-1.5 sm:space-y-4 max-w-2xl w-full flex flex-col items-center justify-center">
+                <div className="inline-flex items-center gap-2 text-orange-700 dark:text-orange-400/90 font-mono text-[10px] sm:text-xs md:text-sm font-bold tracking-widest uppercase bg-white/90 dark:bg-slate-950/90 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full border border-slate-300 dark:border-slate-800 shadow-xs">
                   <span>OxyKal Revenue Simulator</span>
                 </div>
-                <h1 className="text-5xl sm:text-7xl font-bold font-handwriting text-slate-900 dark:text-white leading-tight flex items-center justify-center flex-wrap gap-2 sm:gap-3 text-center">
+                <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold font-handwriting text-slate-900 dark:text-white leading-tight flex items-center justify-center flex-wrap gap-1.5 sm:gap-3 text-center">
                   <span>Kalkulator</span>
                   <span className="text-orange-600 dark:text-orange-400">Revenue</span>
                   <img 
                     src="https://i.imgur.com/niUBncI.jpg" 
                     alt="Oxygen.id Logo" 
-                    className="h-[0.85em] sm:h-[0.95em] w-auto object-contain inline-block align-middle mix-blend-multiply dark:mix-blend-screen"
+                    className="h-[0.8em] sm:h-[0.95em] w-auto object-contain inline-block align-middle mix-blend-multiply dark:mix-blend-screen"
                     referrerPolicy="no-referrer"
                   />
                 </h1>
-                <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-xl mx-auto text-center">
+                <p className="text-xs sm:text-base md:text-lg text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-xl mx-auto text-center px-1">
                   Simulasi perhitungan revenue dan estimasi komisi berdasarkan tier secara cepat & akurat 90%.
                 </p>
               </div>
 
               {/* Feature Badges */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-2xl text-left">
-                <div className="p-3.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center gap-3 shadow-sm hover:border-orange-500/40 transition-colors">
-                  <Zap className="w-6 h-6 text-amber-500 dark:text-amber-400 shrink-0" />
-                  <div>
-                    <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">Hitung Cepat</div>
-                    <div className="text-[11px] text-slate-500 dark:text-slate-400">Simulasi Perhitungan SA</div>
+              <div className="grid grid-cols-3 gap-1.5 sm:gap-3 w-full max-w-2xl text-left">
+                <div className="p-2 sm:p-3.5 bg-white/90 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 rounded-lg sm:rounded-xl flex items-center gap-2 sm:gap-3 shadow-xs hover:border-orange-500/40 transition-colors">
+                  <Zap className="w-4 h-4 sm:w-6 sm:h-6 text-amber-500 dark:text-amber-400 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="text-[10px] sm:text-xs md:text-sm font-black text-slate-900 dark:text-white truncate">Hitung Cepat</div>
+                    <div className="text-[9px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate hidden xs:block sm:block">Simulasi Perhitungan SA</div>
                   </div>
                 </div>
-                <div className="p-3.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center gap-3 shadow-sm hover:border-orange-500/40 transition-colors">
-                  <BarChart2 className="w-6 h-6 text-orange-600 dark:text-orange-400 shrink-0" />
-                  <div>
-                    <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">Tier Stats</div>
-                    <div className="text-[11px] text-slate-500 dark:text-slate-400">Otomatis Progres Target</div>
+                <div className="p-2 sm:p-3.5 bg-white/90 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 rounded-lg sm:rounded-xl flex items-center gap-2 sm:gap-3 shadow-xs hover:border-orange-500/40 transition-colors">
+                  <BarChart2 className="w-4 h-4 sm:w-6 sm:h-6 text-orange-600 dark:text-orange-400 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="text-[10px] sm:text-xs md:text-sm font-black text-slate-900 dark:text-white truncate">Tier Stats</div>
+                    <div className="text-[9px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate hidden xs:block sm:block">Otomatis Progres Target</div>
                   </div>
                 </div>
-                <div className="p-3.5 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl flex items-center gap-3 shadow-sm hover:border-orange-500/40 transition-colors">
-                  <Share2 className="w-6 h-6 text-blue-600 dark:text-blue-400 shrink-0" />
-                  <div>
-                    <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">Cetak Revenue</div>
-                    <div className="text-[11px] text-slate-500 dark:text-slate-400">Bagikan Struk Instan</div>
+                <div className="p-2 sm:p-3.5 bg-white/90 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 rounded-lg sm:rounded-xl flex items-center gap-2 sm:gap-3 shadow-xs hover:border-orange-500/40 transition-colors">
+                  <Share2 className="w-4 h-4 sm:w-6 sm:h-6 text-blue-600 dark:text-blue-400 shrink-0" />
+                  <div className="min-w-0">
+                    <div className="text-[10px] sm:text-xs md:text-sm font-black text-slate-900 dark:text-white truncate">Cetak Revenue</div>
+                    <div className="text-[9px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate hidden xs:block sm:block">Bagikan Struk Instan</div>
                   </div>
                 </div>
               </div>
@@ -582,11 +582,11 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
               {/* Big Action Button */}
               <button
                 onClick={() => setViewMode('calculator')}
-                className="px-8 py-3.5 bg-orange-500 hover:bg-orange-400 active:scale-95 text-slate-950 font-black text-base sm:text-lg uppercase tracking-wider rounded-xl shadow-xl hover:shadow-orange-500/30 transition-all flex items-center gap-3 cursor-pointer ring-4 ring-orange-400/40 hover:ring-orange-400"
+                className="px-5 py-2.5 sm:px-8 sm:py-3.5 bg-orange-500 hover:bg-orange-400 active:scale-95 text-slate-950 font-black text-xs sm:text-base md:text-lg uppercase tracking-wider rounded-lg sm:rounded-xl shadow-lg hover:shadow-orange-500/30 transition-all flex items-center gap-2 sm:gap-3 cursor-pointer ring-2 sm:ring-4 ring-orange-400/40 hover:ring-orange-400 shrink-0"
               >
-                <Play className="w-6 h-6 fill-slate-950" />
+                <Play className="w-4 h-4 sm:w-6 sm:h-6 fill-slate-950 shrink-0" />
                 <span>MULAI SIMULASI</span>
-                <ArrowRight className="w-6 h-6" />
+                <ArrowRight className="w-4 h-4 sm:w-6 sm:h-6 shrink-0" />
               </button>
             </div>
           </div>
@@ -594,40 +594,43 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
           /* MAIN CALCULATOR WORKSPACE */
           <>
             {/* MESIN KASIR DIGITAL DISPLAY SCREEN */}
-            <div className="shrink-0 bg-pos-screen border-2 sm:border-3 border-slate-300 dark:border-slate-900 rounded-xl p-2.5 sm:p-3 shadow-xl relative overflow-hidden space-y-2">
+            <div className="shrink-0 bg-pos-screen border-b sm:border-3 border-slate-200 dark:border-slate-900 rounded-none sm:rounded-xl p-2 sm:p-3 shadow-none sm:shadow-xl relative overflow-hidden space-y-2">
               {/* Top Integrated Bar: Clean Logo + Target SA + Share + Home + Theme Toggle */}
-              <div className="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800/80 pb-2">
-                {/* Brand Logo & Clean Name */}
-                <div className="flex items-center gap-2">
-                  <img
-                    src="https://i.imgur.com/YWbzvKD.jpg"
-                    alt="OxyKal Logo"
-                    referrerPolicy="no-referrer"
-                    className="w-6 h-6 rounded-md object-cover border border-slate-300 dark:border-slate-700 shadow-xs shrink-0"
-                  />
-                  <span className="text-sm font-black tracking-wider text-slate-900 dark:text-white uppercase leading-none font-mono">
-                    Oxy<span className="text-orange-600 dark:text-orange-400">Kal</span>
-                  </span>
-                </div>
+              <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2 border-b border-slate-200 dark:border-slate-800/80 pb-2 max-w-full">
+                {/* Left: Brand Logo & Target SA Box */}
+                <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap">
+                  {/* Brand Logo & Clean Name */}
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <img
+                      src="https://i.imgur.com/YWbzvKD.jpg"
+                      alt="OxyKal Logo"
+                      referrerPolicy="no-referrer"
+                      className="w-5 h-5 sm:w-6 sm:h-6 rounded-md object-cover border border-slate-300 dark:border-slate-700 shadow-xs shrink-0"
+                    />
+                    <span className="text-xs sm:text-sm font-black tracking-wider text-slate-900 dark:text-white uppercase leading-none font-mono">
+                      Oxy<span className="text-orange-600 dark:text-orange-400">Kal</span>
+                    </span>
+                  </div>
 
-                {/* Target SA Box */}
-                <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 px-2 py-0.5 rounded-md shrink-0">
-                  <Target className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                  <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 font-mono">Target:</span>
-                  <input
-                    type="number"
-                    min={1}
-                    value={targetSa}
-                    onChange={(e) => handleTargetChange(parseInt(e.target.value, 10) || 1)}
-                    className="w-10 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-amber-600 dark:text-amber-300 font-mono font-black text-xs px-1 py-0 text-center rounded-xs"
-                  />
-                  <span className="text-[11px] font-mono font-black text-slate-600 dark:text-slate-400">
-                    SA ({hasCalculatedOnce ? Math.round((calculations.totalClosing / targetSa) * 100) : 0}%)
-                  </span>
+                  {/* Target SA Box */}
+                  <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 px-1.5 py-0.5 rounded-md shrink-0">
+                    <Target className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+                    <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400 font-mono">Target:</span>
+                    <input
+                      type="number"
+                      min={1}
+                      value={targetSa}
+                      onChange={(e) => handleTargetChange(parseInt(e.target.value, 10) || 1)}
+                      className="w-9 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-amber-600 dark:text-amber-300 font-mono font-black text-xs px-0.5 py-0 text-center rounded-xs"
+                    />
+                    <span className="text-[10px] sm:text-[11px] font-mono font-black text-slate-600 dark:text-slate-400">
+                      SA ({hasCalculatedOnce ? Math.round((calculations.totalClosing / targetSa) * 100) : 0}%)
+                    </span>
+                  </div>
                 </div>
 
                 {/* Quick Actions (Reset, Cetak, Home & Theme Toggle) */}
-                <div className="flex items-center gap-1.5 ml-auto">
+                <div className="flex items-center gap-1 sm:gap-1.5 ml-auto shrink-0">
                   {(selectedItems.length > 0 || hasCalculatedOnce) && (
                     <button
                       onClick={() => {
@@ -635,37 +638,37 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                         setCalcNotification('Hitungan & komisi di-reset kembali ke Rp0.');
                         setTimeout(() => setCalcNotification(null), 3000);
                       }}
-                      className="px-2.5 py-1 bg-rose-500 hover:bg-rose-600 active:scale-95 text-white font-black text-[11px] rounded-md transition-all flex items-center gap-1 cursor-pointer shadow-sm animate-in fade-in duration-200"
+                      className="px-2 py-1 bg-rose-500 hover:bg-rose-600 active:scale-95 text-white font-black text-[10px] sm:text-[11px] rounded-md transition-all flex items-center gap-1 cursor-pointer shadow-sm shrink-0"
                       title="Reset Semua Hitungan Ke 0"
                     >
-                      <RotateCcw className="w-3 h-3" />
+                      <RotateCcw className="w-3 h-3 shrink-0" />
                       <span className="uppercase">Reset</span>
                     </button>
                   )}
 
                   <button
                     onClick={handleCetakClick}
-                    className="px-2.5 py-1 bg-orange-500 hover:bg-orange-400 active:scale-95 text-slate-950 font-black text-[11px] rounded-md transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+                    className="px-2 py-1 sm:px-2.5 sm:py-1 bg-orange-500 hover:bg-orange-400 active:scale-95 text-slate-950 font-black text-[10px] sm:text-[11px] rounded-md transition-all flex items-center gap-1 sm:gap-1.5 cursor-pointer shadow-sm shrink-0"
                     title="Cetak Struk & Export Hasil"
                   >
-                    <Printer className="w-3.5 h-3.5" />
+                    <Printer className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
                     <span className="uppercase">Cetak</span>
                   </button>
 
                   <button
                     onClick={() => setViewMode('landing')}
-                    className="p-1 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-md transition-colors cursor-pointer"
+                    className="p-1 sm:p-1.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-md transition-colors cursor-pointer shrink-0"
                     title="Kembali ke Landing Page"
                   >
-                    <Home className="w-3.5 h-3.5" />
+                    <Home className="w-3.5 h-3.5 shrink-0" />
                   </button>
 
                   <button
                     onClick={onToggleDarkMode}
-                    className="p-1 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-md transition-colors cursor-pointer"
+                    className="p-1 sm:p-1.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-md transition-colors cursor-pointer shrink-0"
                     title="Toggle Dark/Light Mode"
                   >
-                    {darkMode ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5" />}
+                    {darkMode ? <Sun className="w-3.5 h-3.5 text-amber-400 shrink-0" /> : <Moon className="w-3.5 h-3.5 shrink-0" />}
                   </button>
                 </div>
               </div>
@@ -799,7 +802,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
             {/* LOWER CALCULATOR SPLIT VIEW */}
             <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-2.5 items-stretch overflow-visible lg:overflow-hidden">
               {/* LEFT: PAKET PENJUALAN GRID (LG:COL-SPAN-7) */}
-              <div className="lg:col-span-7 bg-white dark:bg-[#0f172a] rounded-xl p-2.5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col h-[480px] sm:h-[520px] lg:h-full overflow-hidden space-y-1.5 shrink-0 lg:shrink">
+              <div className="lg:col-span-7 bg-white dark:bg-[#0f172a] rounded-none sm:rounded-xl p-2 sm:p-2.5 border-y sm:border border-slate-200 dark:border-slate-800 shadow-none sm:shadow-xs flex flex-col h-[480px] sm:h-[520px] lg:h-full overflow-hidden space-y-1.5 shrink-0 lg:shrink">
                 <div className="shrink-0 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
                   <div className="flex items-center gap-1.5">
                     <Package className="w-4 h-4 text-blue-600" />
@@ -961,7 +964,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
               </div>
 
               {/* RIGHT: STRUK PENJUALAN / RECEIPT LIST (LG:COL-SPAN-5) */}
-              <div className="lg:col-span-5 bg-white dark:bg-[#0f172a] rounded-xl p-2.5 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col h-[320px] sm:h-[360px] lg:h-full overflow-hidden space-y-1.5 shrink-0 lg:shrink">
+              <div className="lg:col-span-5 bg-white dark:bg-[#0f172a] rounded-none sm:rounded-xl p-2 sm:p-2.5 border-y sm:border border-slate-200 dark:border-slate-800 shadow-none sm:shadow-xs flex flex-col h-[320px] sm:h-[360px] lg:h-full overflow-hidden space-y-1.5 shrink-0 lg:shrink">
                 <div className="shrink-0 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
                   <div className="flex items-center gap-1.5">
                     <Receipt className="w-4 h-4 text-orange-600" />

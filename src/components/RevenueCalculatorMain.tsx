@@ -682,25 +682,25 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                     <Award className="w-3 h-3 text-orange-500 shrink-0" />
                     <div className="flex items-center gap-1 font-mono text-[9px] font-bold">
                       <span className={`px-1.5 py-0.5 rounded-xs border transition-all ${
-                        hasCalculatedOnce && calculations.currentTier.level >= 1
+                        hasCalculatedOnce && calculations.currentTier.level === 1
                           ? 'bg-emerald-600 text-white border-emerald-500 shadow-2xs font-black'
                           : 'bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
                       }`} title="Tier 1: Rp 3.750.000">
-                        T1: {formatRupiah(3750000)}
+                        Tier 1: {formatRupiah(3750000)}
                       </span>
                       <span className={`px-1.5 py-0.5 rounded-xs border transition-all ${
-                        hasCalculatedOnce && calculations.currentTier.level >= 2
+                        hasCalculatedOnce && calculations.currentTier.level === 2
                           ? 'bg-emerald-600 text-white border-emerald-500 shadow-2xs font-black'
                           : 'bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
                       }`} title="Tier 2: Rp 4.500.000">
-                        T2: {formatRupiah(4500000)}
+                        Tier 2: {formatRupiah(4500000)}
                       </span>
                       <span className={`px-1.5 py-0.5 rounded-xs border transition-all ${
-                        hasCalculatedOnce && calculations.currentTier.level >= 3
+                        hasCalculatedOnce && calculations.currentTier.level === 3
                           ? 'bg-emerald-600 text-white border-emerald-500 shadow-2xs font-black'
                           : 'bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
                       }`} title="Tier 3: Rp 5.500.000">
-                        T3: {formatRupiah(5500000)}
+                        Tier 3: {formatRupiah(5500000)}
                       </span>
                     </div>
                   </div>

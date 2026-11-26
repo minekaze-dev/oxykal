@@ -26,6 +26,7 @@ import {
   Zap,
   BarChart2,
   Play,
+  Plus,
 } from 'lucide-react';
 import { BillingPeriod, ISPPackage } from '../types/customer';
 import { MASTER_PACKAGES } from '../data/packages';
@@ -50,7 +51,7 @@ interface RevenueCalculatorMainProps {
 }
 
 const PERIOD_OPTIONS: BillingPeriod[] = ['Bulanan', '3 Bulan', '6 Bulan', 'Tahunan'];
-const CATEGORIES = ['Semua', 'Standard', 'SMT', 'Sports', 'Plus TV', 'Oxylite'];
+const CATEGORIES = ['Semua', 'Standard', 'SMT', 'Plus TV', 'Oxylite Nov', 'Promo 11.11'];
 
 export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
   darkMode,
@@ -500,9 +501,9 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                 src="https://imgur.com/7lzkq1g.jpg"
                 alt=""
                 referrerPolicy="no-referrer"
-                className="w-full h-full object-cover object-center opacity-35 dark:opacity-40 mix-blend-multiply dark:mix-blend-screen scale-100 brightness-110 contrast-105"
+                className="w-full h-full object-cover object-center opacity-15 dark:opacity-20 mix-blend-multiply dark:mix-blend-screen scale-100 brightness-110 contrast-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-slate-100/40 via-slate-100/10 to-slate-100/50 dark:from-slate-950/50 dark:via-slate-950/20 dark:to-slate-950/60"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-slate-100/70 via-slate-100/50 to-slate-100/80 dark:from-slate-950/80 dark:via-slate-950/60 dark:to-slate-950/90"></div>
             </div>
 
             {/* TOP BAR WITH BRAND LOGO + THEME TOGGLE & SHARE */}
@@ -802,7 +803,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
             {/* LOWER CALCULATOR SPLIT VIEW */}
             <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-2.5 items-stretch overflow-visible lg:overflow-hidden">
               {/* LEFT: PAKET PENJUALAN GRID (LG:COL-SPAN-7) */}
-              <div className="lg:col-span-7 bg-white dark:bg-[#0f172a] rounded-none sm:rounded-xl p-2 sm:p-2.5 border-y sm:border border-slate-200 dark:border-slate-800 shadow-none sm:shadow-xs flex flex-col h-[480px] sm:h-[520px] lg:h-full overflow-hidden space-y-1.5 shrink-0 lg:shrink">
+              <div className="lg:col-span-7 bg-white dark:bg-[#0f172a] rounded-none sm:rounded-xl p-2 sm:p-2.5 border-y sm:border border-slate-200 dark:border-slate-800 shadow-none sm:shadow-xs flex flex-col h-[540px] sm:h-[580px] lg:h-full overflow-hidden space-y-1.5 shrink-0 lg:shrink">
                 <div className="shrink-0 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-1">
                   <div className="flex items-center gap-1.5">
                     <Package className="w-4 h-4 text-blue-600" />
@@ -874,6 +875,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                     </button>
                   </div>
                 )}
+
 
                 {/* Search & Category Pills */}
                 <div className="shrink-0 space-y-1">

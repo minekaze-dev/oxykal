@@ -42,15 +42,15 @@ const PACKAGE_PRICES = [
   { label: 'Stream 150 Mbps (SMT) — Rp450.000 /bln', value: 450000 },
   { label: 'Stream 200 Mbps (SMT) — Rp540.000 /bln', value: 540000 },
   { label: 'Stream 100 Mbps — Rp242.000 /bln', value: 242000 },
-  { label: 'Stream Sports 200 Mbps Promo — Rp277.500 /bln', value: 277500 },
+
   { label: 'Stream 150 Mbps — Rp306.000 /bln', value: 306000 },
   { label: 'Stream 200 Mbps — Rp356.000 /bln', value: 356000 },
   { label: 'Stream Plus TV 100 Mbps — Rp299.000 /bln', value: 299000 },
   { label: 'Stream Plus TV 150 Mbps — Rp359.000 /bln', value: 359000 },
   { label: 'Stream Plus TV 200 Mbps — Rp409.000 /bln', value: 409000 },
-  { label: 'Oxylite 50 — Rp110.000 /bln', value: 110000 },
-  { label: 'Oxylite 75 — Rp138.750 /bln', value: 138750 },
-  { label: 'Oxylite 100 — Rp166.500 /bln', value: 166500 },
+  { label: 'Promo 11.11 200 Mbps — Rp242.000 /bln', value: 242000 },
+  { label: 'Promo 11.11 300 Mbps — Rp306.000 /bln', value: 306000 },
+  { label: 'Promo 11.11 400 Mbps — Rp356.000 /bln', value: 356000 },
 ];
 
 const PERIOD_OPTIONS: BillingPeriod[] = ['Bulanan', '3 Bulan', '6 Bulan', 'Tahunan'];

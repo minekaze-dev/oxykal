@@ -7,7 +7,7 @@ export interface ISPPackage {
   name: string;
   speed: string;
   price: number;
-  category: 'Standard' | 'Sports' | 'Plus TV' | 'SMT' | 'Oxylite';
+  category: 'Standard' | 'Plus TV' | 'SMT' | 'Oxylite Nov' | 'Promo 11.11';
 }
 
 export interface Customer {

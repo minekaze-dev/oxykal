@@ -27,6 +27,7 @@ import {
   BarChart2,
   Play,
   Plus,
+  FileSpreadsheet,
 } from 'lucide-react';
 import { BillingPeriod, ISPPackage } from '../types/customer';
 import { MASTER_PACKAGES } from '../data/packages';
@@ -140,6 +141,50 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
       return;
     }
     setShowShareModal(true);
+  };
+
+  const handleExportExcel = () => {
+    if (!hasCalculatedOnce || calculations.totalClosing === 0) {
+      setCalcNotification('Silakan hitung hasil terlebih dahulu sebelum export Excel!');
+      setTimeout(() => setCalcNotification(null), 3500);
+      return;
+    }
+
+    const csvRows = [];
+    csvRows.push(['OxyKal Revenue & Komisi Report']);
+    csvRows.push([`Sales Executive:,${salesName || 'Sales'}`]);
+    csvRows.push([`Target SA:,${targetSa}`]);
+    csvRows.push([`Total Closing:,${calculations.totalClosing} SA`]);
+    csvRows.push([`Gross Kontrak:,${calculations.totalGrossContract}`]);
+    csvRows.push([`Total Net Revenue / Bln:,${calculations.totalMonthlyNetRevenue}`]);
+    csvRows.push([`Total PPN:,${calculations.totalPpn}`]);
+    csvRows.push([`Tiering:,${calculations.currentTier.name} (${calculations.inc1Percent}%)`]);
+    csvRows.push([`Komisi Bersih:,${calculations.totalKomisi}`]);
+    csvRows.push([]);
+    csvRows.push(['No', 'Nama Paket', 'Kategori', 'Periode', 'Qty (SA)', 'Harga Satuan (Rp)', 'Gross Kontrak (Rp)', 'Net Revenue / Bln (Rp)']);
+
+    calculations.itemsCalculated.forEach((item, idx) => {
+      csvRows.push([
+        idx + 1,
+        `"${item.name}"`,
+        `"${item.category}"`,
+        `"${item.period}"`,
+        item.qty,
+        item.price,
+        item.itemGross,
+        item.itemMonthlyNet,
+      ]);
+    });
+
+    const csvContent = '\uFEFF' + csvRows.map(e => e.join(',')).join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `OxyKal_Revenue_Report_${salesName.replace(/\s+/g, '_') || 'Sales'}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   // Custom Package Form
@@ -365,6 +410,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
     let totalMonthlyNetRevenue = 0;
     let totalGrossContract = 0;
     let totalYearlyCount = 0;
+    let totalPpn = 0;
 
     const itemsCalculated = committedItems.map((item) => {
       const rev = calculateRevenue(item.price, item.period);
@@ -375,6 +421,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
       totalClosing += itemClosing;
       totalMonthlyNetRevenue += itemMonthlyNet;
       totalGrossContract += itemGross;
+      totalPpn += rev.ppn * item.qty;
 
       if (item.period === 'Tahunan') {
         totalYearlyCount += item.qty;
@@ -406,6 +453,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
       totalMonthlyNetRevenue,
       totalGrossContract,
       totalYearlyCount,
+      totalPpn,
       currentTier,
       tierProgress,
       inc1Percent,
@@ -646,6 +694,15 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                       <span className="uppercase">Reset</span>
                     </button>
                   )}
+
+                  <button
+                    onClick={handleExportExcel}
+                    className="px-2 py-1 sm:px-2.5 sm:py-1 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-black text-[10px] sm:text-[11px] rounded-md transition-all flex items-center gap-1 sm:gap-1.5 cursor-pointer shadow-sm shrink-0"
+                    title="Export Rekapitulasi ke Excel / CSV"
+                  >
+                    <FileSpreadsheet className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                    <span className="uppercase">Excel</span>
+                  </button>
 
                   <button
                     onClick={handleCetakClick}

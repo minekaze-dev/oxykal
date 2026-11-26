@@ -527,11 +527,11 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
     <div className="min-h-screen lg:h-screen lg:max-h-screen overflow-y-auto lg:overflow-hidden flex flex-col items-center justify-between bg-slate-100 dark:bg-[#020617] sm:bg-slate-200 sm:dark:bg-[#020617] text-slate-900 dark:text-slate-100 font-sans p-0 sm:p-3 lg:py-6 lg:px-6">
       {/* ALL-IN-ONE CALCULATOR CHASSIS WRAPPER */}
       <div className="relative w-full max-w-7xl flex-1 min-h-0 flex flex-col">
-        {/* SAMSUL HARDWARE BRAND LOGO EMBEDDED ON TOP TABLET BEZEL (DESKTOP/TABLET ONLY) */}
+        {/* AYPED HARDWARE BRAND LOGO EMBEDDED ON TOP TABLET BEZEL (DESKTOP/TABLET ONLY) */}
         <div className="hidden sm:flex absolute top-[3px] left-1/2 -translate-x-1/2 z-30 pointer-events-none items-center gap-2 select-none px-3.5 py-0.5 rounded-full bg-slate-300/90 dark:bg-slate-900/90 border border-slate-400 dark:border-slate-600 shadow-sm ring-1 ring-black/10 dark:ring-white/20">
           <div className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-cyan-400 animate-pulse"></div>
           <span className="font-black tracking-[0.3em] text-[11px] text-slate-900 dark:text-white font-mono uppercase drop-shadow-sm">
-            SAMSUL
+            AYPED
           </span>
           <div className="w-1.5 h-1.5 rounded-full bg-slate-500 dark:bg-slate-400"></div>
         </div>
@@ -818,38 +818,38 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
 
                 {/* METERS BAR */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1.5 border-t border-slate-200 dark:border-slate-800/80">
-                  <div className="bg-slate-100/90 dark:bg-slate-900/80 px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] sm:text-[11px] font-black uppercase text-slate-500 dark:text-slate-400 font-mono block mb-0.5">
+                  <div className="bg-slate-100/90 dark:bg-slate-900/80 px-3 py-2 rounded-md border border-slate-200 dark:border-slate-800">
+                    <span className="text-[11px] sm:text-xs font-black uppercase text-slate-500 dark:text-slate-400 font-mono block mb-1">
                       TOTAL CLOSING
                     </span>
-                    <span className="text-sm sm:text-base font-black font-pos text-slate-900 dark:text-slate-100">
+                    <span className="text-base sm:text-xl font-black font-pos text-slate-900 dark:text-slate-100">
                       {hasCalculatedOnce ? `${calculations.totalClosing} SA` : '0 SA'}
                     </span>
                   </div>
 
-                  <div className="bg-slate-100/90 dark:bg-slate-900/80 px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] sm:text-[11px] font-black uppercase text-slate-500 dark:text-slate-400 font-mono block mb-0.5">
+                  <div className="bg-slate-100/90 dark:bg-slate-900/80 px-3 py-2 rounded-md border border-slate-200 dark:border-slate-800">
+                    <span className="text-[11px] sm:text-xs font-black uppercase text-slate-500 dark:text-slate-400 font-mono block mb-1">
                       NET REVENUE/BLN
                     </span>
-                    <span className="text-sm sm:text-base font-black font-pos text-pos-green">
+                    <span className="text-base sm:text-xl font-black font-pos text-orange-600 dark:text-orange-400">
                       {hasCalculatedOnce ? formatRupiah(calculations.totalMonthlyNetRevenue) : 'Rp0'}
                     </span>
                   </div>
 
-                  <div className="bg-slate-100/90 dark:bg-slate-900/80 px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] sm:text-[11px] font-black uppercase text-slate-500 dark:text-slate-400 font-mono block mb-0.5">
+                  <div className="bg-slate-100/90 dark:bg-slate-900/80 px-3 py-2 rounded-md border border-slate-200 dark:border-slate-800">
+                    <span className="text-[11px] sm:text-xs font-black uppercase text-slate-500 dark:text-slate-400 font-mono block mb-1">
                       GROSS KONTRAK
                     </span>
-                    <span className="text-sm sm:text-base font-black font-pos text-slate-900 dark:text-slate-100">
+                    <span className="text-base sm:text-xl font-black font-pos text-slate-900 dark:text-slate-100">
                       {hasCalculatedOnce ? formatRupiah(calculations.totalGrossContract) : 'Rp0'}
                     </span>
                   </div>
 
-                  <div className="bg-slate-100/90 dark:bg-slate-900/80 px-2.5 py-1.5 rounded-md border border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] sm:text-[11px] font-black uppercase text-slate-500 dark:text-slate-400 font-mono block mb-0.5">
+                  <div className="bg-slate-100/90 dark:bg-slate-900/80 px-3 py-2 rounded-md border border-slate-200 dark:border-slate-800">
+                    <span className="text-[11px] sm:text-xs font-black uppercase text-slate-500 dark:text-slate-400 font-mono block mb-1">
                       BONUS TAHUNAN
                     </span>
-                    <span className="text-sm sm:text-base font-black font-pos text-pos-amber">
+                    <span className="text-base sm:text-xl font-black font-pos text-amber-600 dark:text-amber-400">
                       {hasCalculatedOnce ? formatRupiah(calculations.totalKomisiTahunan) : 'Rp0'}
                     </span>
                   </div>

@@ -623,7 +623,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                   <Share2 className="w-4 h-4 sm:w-6 sm:h-6 text-blue-600 dark:text-blue-400 shrink-0" />
                   <div className="min-w-0">
                     <div className="text-[10px] sm:text-xs md:text-sm font-black text-slate-900 dark:text-white truncate">Cetak Revenue</div>
-                    <div className="text-[9px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate hidden xs:block sm:block">Bagikan Struk Instan</div>
+                    <div className="text-[9px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate hidden xs:block sm:block">Export ke Excel</div>
                   </div>
                 </div>
               </div>
@@ -675,6 +675,34 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                     <span className="text-[10px] sm:text-[11px] font-mono font-black text-slate-600 dark:text-slate-400">
                       SA ({hasCalculatedOnce ? Math.round((calculations.totalClosing / targetSa) * 100) : 0}%)
                     </span>
+                  </div>
+
+                  {/* Tier Reference Badges (T1: 3.75Jt, T2: 4.5Jt, T3: 5.5Jt) */}
+                  <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 px-1.5 py-0.5 rounded-md shrink-0">
+                    <Award className="w-3 h-3 text-orange-500 shrink-0" />
+                    <div className="flex items-center gap-1 font-mono text-[9px] font-bold">
+                      <span className={`px-1.5 py-0.5 rounded-xs border transition-all ${
+                        hasCalculatedOnce && calculations.currentTier.level >= 1
+                          ? 'bg-emerald-600 text-white border-emerald-500 shadow-2xs font-black'
+                          : 'bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                      }`} title="Tier 1: Rp 3.750.000">
+                        T1: {formatRupiah(3750000)}
+                      </span>
+                      <span className={`px-1.5 py-0.5 rounded-xs border transition-all ${
+                        hasCalculatedOnce && calculations.currentTier.level >= 2
+                          ? 'bg-emerald-600 text-white border-emerald-500 shadow-2xs font-black'
+                          : 'bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                      }`} title="Tier 2: Rp 4.500.000">
+                        T2: {formatRupiah(4500000)}
+                      </span>
+                      <span className={`px-1.5 py-0.5 rounded-xs border transition-all ${
+                        hasCalculatedOnce && calculations.currentTier.level >= 3
+                          ? 'bg-emerald-600 text-white border-emerald-500 shadow-2xs font-black'
+                          : 'bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                      }`} title="Tier 3: Rp 5.500.000">
+                        T3: {formatRupiah(5500000)}
+                      </span>
+                    </div>
                   </div>
                 </div>
 

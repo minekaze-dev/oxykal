@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import * as XLSX from 'xlsx';
 import {
   Calculator,
   Trash2,
@@ -28,6 +29,7 @@ import {
   Play,
   Plus,
   FileSpreadsheet,
+  Upload,
 } from 'lucide-react';
 import { BillingPeriod, ISPPackage } from '../types/customer';
 import { MASTER_PACKAGES } from '../data/packages';
@@ -130,14 +132,19 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showShareModal, setShowShareModal] = useState<boolean>(false);
   const [copiedSuccess, setCopiedSuccess] = useState<boolean>(false);
-  const [calcNotification, setCalcNotification] = useState<string | null>(null);
+  const [calcNotification, setCalcNotification] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const showToast = (message: string, type: 'error' | 'success' = 'error', duration = 3500) => {
+    setCalcNotification({ message, type });
+    setTimeout(() => {
+      setCalcNotification((prev) => (prev?.message === message ? null : prev));
+    }, duration);
+  };
 
   const handleCetakClick = () => {
     if (!hasCalculatedOnce || calculations.totalClosing === 0) {
-      setCalcNotification('Silakan hitung hasil terlebih dahulu!');
-      setTimeout(() => {
-        setCalcNotification(null);
-      }, 3500);
+      showToast('Silakan hitung hasil terlebih dahulu!', 'error');
       return;
     }
     setShowShareModal(true);
@@ -145,8 +152,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
 
   const handleExportExcel = () => {
     if (!hasCalculatedOnce || calculations.totalClosing === 0) {
-      setCalcNotification('Silakan hitung hasil terlebih dahulu sebelum export Excel!');
-      setTimeout(() => setCalcNotification(null), 3500);
+      showToast('Silakan hitung hasil terlebih dahulu sebelum export Excel!', 'error');
       return;
     }
 
@@ -185,6 +191,168 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImportExcel = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const buffer = await file.arrayBuffer();
+      const workbook = XLSX.read(buffer, { type: 'array' });
+      const firstSheetName = workbook.SheetNames[0];
+      if (!firstSheetName) {
+        showToast('File Excel kosong atau tidak valid.', 'error');
+        return;
+      }
+
+      const sheet = workbook.Sheets[firstSheetName];
+      let rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1, defval: '' });
+
+      const findHeaderIndex = (grid: unknown[][]) =>
+        grid.findIndex((row) =>
+          row.some((cell) => String(cell ?? '').toLowerCase().includes('nama paket'))
+        );
+
+      let headerRowIdx = findHeaderIndex(rows);
+
+      // Fallback for semicolon-delimited CSV saved by Indonesian locale Excel
+      if (headerRowIdx === -1 && file.name.toLowerCase().endsWith('.csv')) {
+        const text = new TextDecoder('utf-8').decode(buffer).replace(/^\uFEFF/, '');
+        const splitCsvRow = (line: string, delimiter: string) => {
+          const result: string[] = [];
+          let current = '';
+          let inQuotes = false;
+          for (let i = 0; i < line.length; i++) {
+            const ch = line[i];
+            if (ch === '"') {
+              inQuotes = !inQuotes;
+            } else if (ch === delimiter && !inQuotes) {
+              result.push(current.trim());
+              current = '';
+            } else {
+              current += ch;
+            }
+          }
+          result.push(current.trim());
+          return result;
+        };
+
+        const semicolonRows = text
+          .split(/\r?\n/)
+          .filter((line) => line.trim().length > 0)
+          .map((line) => splitCsvRow(line, ';'));
+
+        if (findHeaderIndex(semicolonRows) !== -1) {
+          rows = semicolonRows;
+          headerRowIdx = findHeaderIndex(rows);
+        }
+      }
+
+      if (headerRowIdx === -1) {
+        showToast('Format file tidak sesuai. Gunakan file hasil export Excel OxyKal.', 'error');
+        return;
+      }
+
+      // Parse optional metadata before header row
+      for (let i = 0; i < headerRowIdx; i++) {
+        const row = rows[i];
+        const label = String(row[0] ?? '').toLowerCase();
+        const val = String(row[1] ?? '').trim();
+        if (label.includes('sales executive') && val) {
+          handleNameChange(val);
+        } else if (label.includes('target sa') && val) {
+          const parsedTarget = parseInt(val.replace(/[^\d]/g, ''), 10);
+          if (parsedTarget > 0) handleTargetChange(parsedTarget);
+        }
+      }
+
+      const headerRow = rows[headerRowIdx].map((cell) => String(cell ?? '').toLowerCase().trim());
+      const nameIdx = headerRow.findIndex((h) => h.includes('nama paket'));
+      const catIdx = headerRow.findIndex((h) => h.includes('kategori'));
+      const periodIdx = headerRow.findIndex((h) => h.includes('periode'));
+      const qtyIdx = headerRow.findIndex((h) => h.includes('qty'));
+      const priceIdx = headerRow.findIndex((h) => h.includes('harga'));
+
+      if (nameIdx === -1 || qtyIdx === -1 || priceIdx === -1) {
+        showToast('Kolom Nama Paket, Qty, atau Harga tidak ditemukan di file.', 'error');
+        return;
+      }
+
+      const importedItems: SelectedItem[] = [];
+
+      for (let i = headerRowIdx + 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row || row.length === 0) continue;
+
+        const name = String(row[nameIdx] ?? '').trim();
+        if (!name || name.toLowerCase().startsWith('total')) continue;
+
+        const category = catIdx !== -1 ? String(row[catIdx] ?? '').trim() || 'Custom' : 'Custom';
+
+        const rawPeriod = periodIdx !== -1 ? String(row[periodIdx] ?? '').toLowerCase().trim() : 'bulanan';
+        let period: BillingPeriod = 'Bulanan';
+        if (rawPeriod.includes('3')) period = '3 Bulan';
+        else if (rawPeriod.includes('6')) period = '6 Bulan';
+        else if (rawPeriod.includes('tahun') || rawPeriod.includes('12') || rawPeriod.includes('thn')) period = 'Tahunan';
+
+        const rawQty = row[qtyIdx];
+        const qty =
+          typeof rawQty === 'number'
+            ? Math.max(1, Math.round(rawQty))
+            : Math.max(1, parseInt(String(rawQty ?? '').replace(/[^\d]/g, ''), 10) || 1);
+
+        const rawPrice = row[priceIdx];
+        let price = 0;
+        if (typeof rawPrice === 'number') {
+          price = Math.round(rawPrice);
+        } else {
+          const str = String(rawPrice ?? '').trim().replace(/rp/gi, '').trim();
+          if (/^\d{1,3}(\.\d{3})+$/.test(str)) {
+            price = parseInt(str.replace(/\./g, ''), 10) || 0;
+          } else if (/^\d{1,3}(,\d{3})+$/.test(str)) {
+            price = parseInt(str.replace(/,/g, ''), 10) || 0;
+          } else {
+            price = parseInt(str.replace(/[^\d]/g, ''), 10) || 0;
+          }
+        }
+
+        if (price <= 0) continue;
+
+        const matchedPkg =
+          MASTER_PACKAGES.find((p) => p.name.toLowerCase() === name.toLowerCase() && p.price === price) ||
+          MASTER_PACKAGES.find((p) => p.name.toLowerCase() === name.toLowerCase());
+
+        importedItems.push({
+          id: `${Date.now()}-${i}-${Math.random().toString(36).substring(2, 6)}`,
+          packageId: matchedPkg?.id,
+          name: matchedPkg?.name || name,
+          speed: matchedPkg?.speed || 'Custom',
+          category: matchedPkg?.category || category,
+          price,
+          period,
+          qty,
+        });
+      }
+
+      if (importedItems.length === 0) {
+        showToast('Tidak ada data paket valid ditemukan di dalam file.', 'error');
+        return;
+      }
+
+      setSelectedItems(importedItems);
+      setCommittedItems(importedItems);
+      setHasCalculatedOnce(true);
+
+      const totalImportedSa = importedItems.reduce((sum, item) => sum + item.qty, 0);
+      showToast(`Berhasil load ${importedItems.length} paket (${totalImportedSa} SA) dari Excel!`, 'success', 4000);
+    } catch (err) {
+      console.error('Failed to import Excel/CSV:', err);
+      showToast('Gagal membaca file Excel/CSV. Pastikan file tidak rusak.', 'error');
+    } finally {
+      e.target.value = '';
+    }
   };
 
   // Custom Package Form
@@ -706,14 +874,21 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                   </div>
                 </div>
 
-                {/* Quick Actions (Reset, Cetak, Home & Theme Toggle) */}
+                {/* Quick Actions (Reset, Import, Excel, Cetak, Home & Theme Toggle) */}
                 <div className="flex items-center gap-1 sm:gap-1.5 ml-auto shrink-0">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".csv,.xlsx,.xls"
+                    onChange={handleImportExcel}
+                    className="hidden"
+                  />
+
                   {(selectedItems.length > 0 || hasCalculatedOnce) && (
                     <button
                       onClick={() => {
                         handleResetAll();
-                        setCalcNotification('Hitungan & komisi di-reset kembali ke Rp0.');
-                        setTimeout(() => setCalcNotification(null), 3000);
+                        showToast('Hitungan & komisi di-reset kembali ke Rp0.', 'success', 3000);
                       }}
                       className="px-2 py-1 bg-rose-500 hover:bg-rose-600 active:scale-95 text-white font-black text-[10px] sm:text-[11px] rounded-md transition-all flex items-center gap-1 cursor-pointer shadow-sm shrink-0"
                       title="Reset Semua Hitungan Ke 0"
@@ -724,12 +899,21 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                   )}
 
                   <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="px-2 py-1 sm:px-2.5 sm:py-1 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-black text-[10px] sm:text-[11px] rounded-md transition-all flex items-center gap-1 sm:gap-1.5 cursor-pointer shadow-sm shrink-0"
+                    title="Load / Import dari File Hasil Export Excel (.csv / .xlsx)"
+                  >
+                    <Upload className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                    <span className="uppercase">Import</span>
+                  </button>
+
+                  <button
                     onClick={handleExportExcel}
                     className="px-2 py-1 sm:px-2.5 sm:py-1 bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-black text-[10px] sm:text-[11px] rounded-md transition-all flex items-center gap-1 sm:gap-1.5 cursor-pointer shadow-sm shrink-0"
                     title="Export Rekapitulasi ke Excel / CSV"
                   >
                     <FileSpreadsheet className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
-                    <span className="uppercase">Excel</span>
+                    <span className="uppercase">Export</span>
                   </button>
 
                   <button
@@ -759,16 +943,26 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                 </div>
               </div>
 
-              {/* TOAST NOTIFICATION IF USER CLICKS CETAK BEFORE CALCULATING */}
+              {/* TOAST NOTIFICATION */}
               {calcNotification && (
-                <div className="bg-rose-500 text-white dark:bg-rose-600 font-bold text-xs sm:text-sm px-3.5 py-2 rounded-lg shadow-lg flex items-center justify-between gap-2 border border-rose-400 animate-in fade-in slide-in-from-top-2 duration-200 shrink-0">
+                <div
+                  className={`text-white font-bold text-xs sm:text-sm px-3.5 py-2 rounded-lg shadow-lg flex items-center justify-between gap-2 border animate-in fade-in slide-in-from-top-2 duration-200 shrink-0 ${
+                    calcNotification.type === 'success'
+                      ? 'bg-emerald-600 dark:bg-emerald-700 border-emerald-400'
+                      : 'bg-rose-500 dark:bg-rose-600 border-rose-400'
+                  }`}
+                >
                   <div className="flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 text-white shrink-0 animate-bounce" />
-                    <span>{calcNotification}</span>
+                    {calcNotification.type === 'success' ? (
+                      <Check className="w-4 h-4 text-white shrink-0" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4 text-white shrink-0 animate-bounce" />
+                    )}
+                    <span>{calcNotification.message}</span>
                   </div>
                   <button
                     onClick={() => setCalcNotification(null)}
-                    className="text-white/80 hover:text-white font-bold text-xs px-1"
+                    className="text-white/80 hover:text-white font-bold text-xs px-1 cursor-pointer"
                   >
                     ✕
                   </button>
@@ -814,33 +1008,49 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                     </div>
 
                     {/* DYNAMIC RESULT NOTIFICATION BOX (ONLY SHOWN WHEN HITUNG WAS CLICKED AND HAS RESULTS) */}
-                    {hasCalculatedOnce && calculations.totalClosing > 0 && (
-                      <>
-                        {calculations.currentTier.level > 0 ? (
-                          /* CONGRATULATIONS CARD (TIER 1+) */
-                          <div className="px-2.5 py-1 bg-orange-100 dark:bg-orange-950/70 border border-orange-300 dark:border-orange-500/60 rounded-md text-orange-900 dark:text-orange-200 flex items-center gap-2 animate-in fade-in duration-200">
-                            <Smile className="w-4 h-4 text-orange-600 dark:text-orange-400 shrink-0" />
-                            <div className="text-[11px] font-mono text-orange-800 dark:text-orange-300 truncate">
-                              <strong>🎉 Selamat!</strong> Anda Kualifikasi {calculations.currentTier.name}!
-                              <span className="text-orange-600 dark:text-orange-400 ml-1">
-                                (Base: {formatRupiah(calculations.baseKomisi)}
-                                {calculations.totalKomisiTahunan > 0 && ` + Bonus Thn: ${formatRupiah(calculations.totalKomisiTahunan)}`})
+                    {hasCalculatedOnce && calculations.totalClosing > 0 && (() => {
+                      const netRev = calculations.totalMonthlyNetRevenue;
+                      const tierTargets = [
+                        { level: 1, label: 'Tier 1', shortage: Math.max(0, 3750000 - netRev) },
+                        { level: 2, label: 'Tier 2', shortage: Math.max(0, 4500000 - netRev) },
+                        { level: 3, label: 'Tier 3', shortage: Math.max(0, 5500000 - netRev) },
+                      ].filter((t) => t.shortage > 0);
+
+                      const shortageText = tierTargets
+                        .map((t) => `${formatRupiah(t.shortage)} untuk capai ${t.label}`)
+                        .join(', ');
+
+                      return calculations.currentTier.level > 0 ? (
+                        /* CONGRATULATIONS CARD (TIER 1+) */
+                        <div className="px-2.5 py-1 bg-orange-100 dark:bg-orange-950/70 border border-orange-300 dark:border-orange-500/60 rounded-md text-orange-900 dark:text-orange-200 flex items-center gap-2 animate-in fade-in duration-200">
+                          <Smile className="w-4 h-4 text-orange-600 dark:text-orange-400 shrink-0" />
+                          <div className="text-[11px] font-mono text-orange-800 dark:text-orange-300 leading-snug">
+                            <strong>🎉 Selamat!</strong> Anda Kualifikasi {calculations.currentTier.name}!
+                            <span className="text-orange-600 dark:text-orange-400 ml-1">
+                              (Base: {formatRupiah(calculations.baseKomisi)}
+                              {calculations.totalKomisiTahunan > 0 && ` + Bonus Thn: ${formatRupiah(calculations.totalKomisiTahunan)}`})
+                            </span>
+                            {tierTargets.length > 0 && (
+                              <span className="text-orange-700 dark:text-orange-200 font-bold ml-1.5">
+                                • Kurang {shortageText}
                               </span>
-                            </div>
+                            )}
                           </div>
-                        ) : (
-                          /* TIER PROGRESS CARD (TIER 0 STATUS WHEN HAS ITEMS) */
-                          <div className="px-2.5 py-1 bg-amber-100 dark:bg-amber-950/50 border border-amber-300 dark:border-amber-500/50 rounded-md text-amber-900 dark:text-amber-200 flex items-center gap-2 animate-in fade-in duration-200">
-                            <div className="text-[11px] font-mono text-amber-800 dark:text-amber-300 truncate">
-                              <strong>Progres Tier 1:</strong> Terkumpul {calculations.totalClosing} SA & {formatRupiah(calculations.totalMonthlyNetRevenue)} Net.
-                              <span className="text-amber-700 dark:text-amber-200 font-bold ml-1">
-                                (Kurang: {calculations.tierProgress.closingNeeded} SA & {formatRupiah(calculations.tierProgress.revenueNeeded)} Net)
+                        </div>
+                      ) : (
+                        /* TIER PROGRESS CARD (TIER 0 STATUS WHEN HAS ITEMS) */
+                        <div className="px-2.5 py-1.5 bg-amber-100 dark:bg-amber-950/50 border border-amber-300 dark:border-amber-500/50 rounded-md text-amber-900 dark:text-amber-200 flex items-center gap-2 animate-in fade-in duration-200">
+                          <div className="text-[11px] font-mono text-amber-800 dark:text-amber-300 leading-snug">
+                            <strong>Terkumpul {formatRupiah(netRev)} Net.</strong>
+                            {tierTargets.length > 0 && (
+                              <span className="text-amber-900 dark:text-amber-200 font-bold ml-1">
+                                (Kurang {shortageText})
                               </span>
-                            </div>
+                            )}
                           </div>
-                        )}
-                      </>
-                    )}
+                        </div>
+                      );
+                    })()}
                   </>
                 )}
 
@@ -1095,8 +1305,16 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
 
                 {/* SCROLLABLE RECEIPT ITEMS LIST */}
                 {selectedItems.length === 0 ? (
-                  <div className="flex-1 flex flex-col items-center justify-center py-6 text-center bg-slate-50 dark:bg-slate-900/50 rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-800">
+                  <div className="flex-1 flex flex-col items-center justify-center gap-2.5 py-6 text-center bg-slate-50 dark:bg-slate-900/50 rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-800">
                     <ShoppingCart className="w-6 h-6 text-slate-400 opacity-40" />
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="px-3 py-1.5 bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 rounded-lg text-[11px] font-black uppercase flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>Load dari Excel / CSV</span>
+                    </button>
                   </div>
                 ) : (
                   <div className="flex-1 min-h-0 overflow-y-auto pr-1 space-y-1.5">
@@ -1206,8 +1424,7 @@ export const RevenueCalculatorMain: React.FC<RevenueCalculatorMainProps> = ({
                       <button
                         onClick={() => {
                           handleResetAll();
-                          setCalcNotification('Hitungan & komisi berhasil di-reset ke Rp0.');
-                          setTimeout(() => setCalcNotification(null), 3000);
+                          showToast('Hitungan & komisi berhasil di-reset ke Rp0.', 'success', 3000);
                         }}
                         disabled={isCalculating}
                         className="py-2.5 px-3 bg-rose-500/15 hover:bg-rose-500/25 dark:bg-rose-950/60 dark:hover:bg-rose-900/80 text-rose-600 dark:text-rose-400 border border-rose-300 dark:border-rose-800/80 font-black text-xs uppercase rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
